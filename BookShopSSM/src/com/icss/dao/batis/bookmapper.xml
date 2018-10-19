@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icss.dao.batis.IBookMapper">
+
+     <resultMap id="BookMap" type="TBook">     
+	    <result property="isbn" column="isbn" jdbcType="VARCHAR"/>     
+	    <result property="pic" column="pic" jdbcType="BLOB" />
+    </resultMap> 
+    
+	<select id="getAllBooks" resultType="TBook">
+		select isbn,bname,price,press from tbook
+	</select>
+	
+	<select id="getBookInfo"  resultType="TBook">
+		select isbn,bname,price,press,bdesc from tbook where isbn=#{isbn}
+	</select>
+	
+	<select id="getPic"  resultMap="BookMap">
+		select isbn, pic from tbook where isbn=#{isbn}
+	</select>
+	
+	<select id="getCarBooks"  resultType="TBook">
+		select isbn,bname,author,price from tbook where isbn in
+		 <foreach item="item" index="index" collection="isbns" open="(" separator="," close=")">
+           #{item}
+ 		</foreach>
+	
+	</select>
+	
+	<update id="updateBookCount" >
+	update tbook set bcount=bcount+#{bcount} where isbn=#{isbn}
+	</update>
+	
+	<select id="getBookType" resultType="TBookType">
+	select * from tbooktype
+	</select>
+	<insert id="addBook">
+	insert into tbook values(#{isbn},#{tno},#{bname},#{author},#{press},#{pubdate},#{price},#{bcount},#{bdesc},#{pic})
+	</insert>
+
+</mapper>

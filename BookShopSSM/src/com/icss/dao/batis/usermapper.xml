@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icss.dao.batis.IUserMapper">
+
+
+	<update id="updateUserAccout"  >
+		update tuser set account=account+#{money} where uname=#{uname}
+	</update>
+	<insert id="addOrder"  parameterType="TOrder">
+	insert into torder values(#{dno},#{uname},#{allprice},#{btime})
+	</insert>
+	
+	<insert id="addOrderDetail"  parameterType="TOrderDetail">
+	insert into TOrderDetail values((select nvl(max(aid),0)+1 from torderdetail),#{dno},#{isbn},#{bcount},#{bprice})
+	</insert>
+	
+	<select id="getSqlAllRows" resultType="int">
+	select count(*) from (select u.uname,b.bname,d.bprice,b.press,
+	b.author,o.btime,o.dno,d.bcount
+	from tbook b,tuser u,torder
+	o,torderdetail d where u.uname = o.uname
+	and b.isbn = d.isbn and o.dno =
+	d.dno
+
+	<if test="uname!= null and uname!=''">
+		and u.uname like CONCAT(CONCAT('%', #{uname}),'%')
+	</if>
+	<if test="beginDate != null">
+		and o.btime >= #{beginDate}
+	</if>
+
+	<if test="endDate != null">
+		 <![CDATA[ and  o.btime <= #{endDate}   ]]>
+	</if>
+
+	)
+</select>
+
+	<select id="getUserBuyinfo" resultType="com.icss.dto.Buyinfo" >
+	select * from ( select rownum rw ,tb.* from (select count(*) from (select u.uname,b.bname,d.bprice,b.press,
+	b.author,o.btime,o.dno,d.bcount
+	from tbook b,tuser u,torder
+	o,torderdetail d where u.uname = o.uname
+	and b.isbn = d.isbn and o.dno =
+	d.dno
+
+	<if test="uname != null and uname !=''">
+		and u.uname like CONCAT(CONCAT('%', #{uname}),'%')
+	</if>
+	<if test="beginDate != null">
+		and o.btime >= #{beginDate}
+	</if>
+
+	<if test="endDate != null">
+		 <![CDATA[ and  o.btime <= #{endDate}   ]]>
+	</if>
+
+	)
+	)tb) where rw>=#{iStart}  
+	 <![CDATA[ and rw<#{iEnd} ]]> ;
+	</select>
+	
+	<select id="login" resultType="TUser">
+	select * from tuser where uname=#{uname} and pwd=#{pwd}
+	</select>
+	
+    <select id="getAllUser"  resultType="TUser">
+    select * from tuser
+    </select>
+    <delete id="deleteUser">delete from tuser where uname=#{uname}</delete>
+</mapper>

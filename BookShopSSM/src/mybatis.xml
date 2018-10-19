@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<settings>		
+		<setting name="jdbcTypeForNull" value="NULL" />		
+	</settings>
+	
+	<typeAliases>
+          <typeAlias alias="TBook" type="com.icss.entity.TBook"/>
+          <typeAlias alias="TUser" type="com.icss.entity.TUser"/>
+           <typeAlias alias="TOrder" type="com.icss.entity.TOrder"/>
+           <typeAlias alias="TOrderDetail" type="com.icss.entity.TOrderDetail"/>
+           <typeAlias alias="TBookType" type="com.icss.entity.TBookType"/>
+    </typeAliases>
+
+	<mappers>
+		<mapper resource="com/icss/dao/batis/usermapper.xml" />
+		<mapper resource="com/icss/dao/batis/bookmapper.xml" />
+	</mappers>
+
+
+</configuration>
